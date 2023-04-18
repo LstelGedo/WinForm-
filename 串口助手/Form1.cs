@@ -186,6 +186,7 @@ namespace 串口助手
             reclve_rtb.AppendText(dataRecive);
 
             MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
+            MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
         }
     }
 }
