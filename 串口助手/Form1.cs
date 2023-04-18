@@ -15,7 +15,17 @@ namespace 串口助手
 {
     public partial class Form1 : Form
     {
+        //启动\关闭按钮
         private bool isOpen = false;
+
+        //用于暂停接收
+        private bool isRxShow = true;
+
+        //缓存区用户编码转换
+        private List<byte> reciveBuffer = new List<byte>();
+
+        private int reciveCount = 0;
+
         public Form1()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -178,15 +188,57 @@ namespace 串口助手
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            if (isRxShow == false)
+            {
+                MessageBox.Show("对方已暂停接收，无法发送");
+                return;
+            }
 
             //读取所有的数据ReadExisting();
-            string dataRecive = serialPort1.ReadExisting();
-
+            //string dataRecive = serialPort1.ReadExisting();
             //添加数据
-            reclve_rtb.AppendText(dataRecive);
+            //reclve_rtb.AppendText(dataRecive);
 
-            MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
-            MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
+            //将串口数据读取出来
+            byte[] dataTemp = new byte[serialPort1.ReadBufferSize];
+            serialPort1.Read(dataTemp,0, dataTemp.Length);
+
+            //读取到数据后转换到List中（缓存区）
+            reciveBuffer.AddRange(dataTemp);
+
+            //记录长度（用于更新记录接收记录）
+            reciveCount += dataTemp.Length;
+
+            //异步线程更新
+            this.Invoke(new EventHandler(delegate 
+            {
+                //判断是否是16进制
+                if (!recuvehex_chb.Checked)
+                {
+
+                }
+
+
+                
+            }));
+
+
+            //MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
+        }
+
+        //暂停
+        private void stop_btn_Click(object sender, EventArgs e)
+        {
+            if (isRxShow == true)
+            {
+                isRxShow = false;
+                stop_btn.Text = "取消暂停";
+            }
+            else
+            {
+                isRxShow = true;
+                stop_btn.Text = "暂停";
+            }
         }
     }
 }

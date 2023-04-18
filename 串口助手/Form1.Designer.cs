@@ -52,7 +52,7 @@
             this.bcsj_btn = new System.Windows.Forms.Button();
             this.stop_btn = new System.Windows.Forms.Button();
             this.clear_btn = new System.Windows.Forms.Button();
-            this.hex_chb = new System.Windows.Forms.CheckBox();
+            this.recuvehex_chb = new System.Windows.Forms.CheckBox();
             this.auticlear_chb = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.autotimer_txb = new System.Windows.Forms.TextBox();
@@ -262,7 +262,7 @@
             this.groupBox2.Controls.Add(this.bcsj_btn);
             this.groupBox2.Controls.Add(this.stop_btn);
             this.groupBox2.Controls.Add(this.clear_btn);
-            this.groupBox2.Controls.Add(this.hex_chb);
+            this.groupBox2.Controls.Add(this.recuvehex_chb);
             this.groupBox2.Controls.Add(this.auticlear_chb);
             this.groupBox2.Location = new System.Drawing.Point(12, 276);
             this.groupBox2.Name = "groupBox2";
@@ -304,6 +304,7 @@
             this.stop_btn.TabIndex = 16;
             this.stop_btn.Text = "暂停";
             this.stop_btn.UseVisualStyleBackColor = true;
+            this.stop_btn.Click += new System.EventHandler(this.stop_btn_Click);
             // 
             // clear_btn
             // 
@@ -314,15 +315,15 @@
             this.clear_btn.Text = "手动清空";
             this.clear_btn.UseVisualStyleBackColor = true;
             // 
-            // hex_chb
+            // recuvehex_chb
             // 
-            this.hex_chb.AutoSize = true;
-            this.hex_chb.Location = new System.Drawing.Point(23, 60);
-            this.hex_chb.Name = "hex_chb";
-            this.hex_chb.Size = new System.Drawing.Size(72, 16);
-            this.hex_chb.TabIndex = 15;
-            this.hex_chb.Text = "十六进制";
-            this.hex_chb.UseVisualStyleBackColor = true;
+            this.recuvehex_chb.AutoSize = true;
+            this.recuvehex_chb.Location = new System.Drawing.Point(23, 60);
+            this.recuvehex_chb.Name = "recuvehex_chb";
+            this.recuvehex_chb.Size = new System.Drawing.Size(72, 16);
+            this.recuvehex_chb.TabIndex = 15;
+            this.recuvehex_chb.Text = "十六进制";
+            this.recuvehex_chb.UseVisualStyleBackColor = true;
             // 
             // auticlear_chb
             // 
@@ -586,7 +587,7 @@
         private System.Windows.Forms.Button bcsj_btn;
         private System.Windows.Forms.Button stop_btn;
         private System.Windows.Forms.Button clear_btn;
-        private System.Windows.Forms.CheckBox hex_chb;
+        private System.Windows.Forms.CheckBox recuvehex_chb;
         private System.Windows.Forms.CheckBox auticlear_chb;
         private System.Windows.Forms.TextBox autotimer_txb;
         private System.Windows.Forms.Label label2;
