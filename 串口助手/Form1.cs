@@ -178,6 +178,7 @@ namespace 串口助手
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+
             //读取所有的数据ReadExisting()
             string dataRecive = serialPort1.ReadExisting();
 
