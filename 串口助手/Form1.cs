@@ -200,7 +200,7 @@ namespace 串口助手
             //reclve_rtb.AppendText(dataRecive);
 
             //将串口数据读取出来
-            byte[] dataTemp = new byte[serialPort1.ReadBufferSize];
+            byte[] dataTemp = new byte[serialPort1.BytesToRead];
             serialPort1.Read(dataTemp,0, dataTemp.Length);
 
             //读取到数据后转换到List中（缓存区）
@@ -214,6 +214,21 @@ namespace 串口助手
             {
                 //判断是否是16进制
                 if (!recuvehex_chb.Checked)
+                {
+                    //获取字符串string
+                    string str = Encoding.GetEncoding("gb2312").GetString(dataTemp);
+
+                    // 0x00 -> \0 结束 不会显示
+
+                    //转译
+                    str = str.Replace("\0", "\\0");
+
+                     reclve_rtb.AppendText(str);
+
+                    //方法一致二选一
+                    //reclve_rtb.AppendText(Encoding.GetEncoding("gb2312").GetString(dataTemp).Replace("\0", "\\0"));
+                }
+                else
                 {
 
                 }
