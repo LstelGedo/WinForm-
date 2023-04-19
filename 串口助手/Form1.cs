@@ -127,6 +127,11 @@ namespace 串口助手
         //启动项
         private void serialLoad()
         {
+
+            //获取计算机支持的编码格式
+            EncodingInfo[] encodingInfos = Encoding.GetEncodings();
+
+
             //本地注册表编辑器地址（虚拟串口）：计算机\HKEY_LOCAL_MACCHINE\HARDWARE\DEVICEMAP\SERIALCOMM
             //获取端口号：注册列表中获取信息
             //继承注册列表Registry
@@ -230,7 +235,8 @@ namespace 串口助手
                 }
                 else
                 {
-                    //
+                    //当16进制是选中的姿态下
+
 
                 }
 
