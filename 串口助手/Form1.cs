@@ -228,7 +228,7 @@ namespace 串口助手
                     //转译
                     str = str.Replace("\0", "\\0");
 
-                     reclve_rtb.AppendText(str);
+                    reclve_rtb.AppendText(str);
 
                     //方法一致二选一
                     //reclve_rtb.AppendText(Encoding.GetEncoding("gb2312").GetString(dataTemp).Replace("\0", "\\0"));
@@ -236,6 +236,8 @@ namespace 串口助手
                 else
                 {
                     //当16进制是选中的姿态下
+                    //将接收到的dataTemp转换到16进制
+                    reclve_rtb.AppendText(Transform.ToHexString(dataTemp," "));
 
 
                 }
@@ -262,5 +264,43 @@ namespace 串口助手
                 stop_btn.Text = "暂停";
             }
         }
+
+        private void recuvehex_chb_CheckedChanged(object sender, EventArgs e)
+        {
+
+            //判断接收框是否为空
+            if (reclve_rtb.Text == "")
+            {
+                return;
+            }
+
+            //当选中的时候转换成16进制
+            if (recuvehex_chb.Checked)
+            {
+                //从reciveBuffer提取数据
+                reclve_rtb.Text = Transform.ToHexString(reciveBuffer.ToArray()," ");
+            }
+            else
+            {
+                reclve_rtb.Text = Encoding.GetEncoding("gb2312").GetString(reciveBuffer.ToArray()).Replace("\0","\\0");
+            }
+
+
+        }
+
+        //手动清空
+        private void clear_btn_Click(object sender, EventArgs e)
+        {
+            MessageBoxButtons messbutton = MessageBoxButtons.OKCancel;
+            DialogResult dr = MessageBox.Show("系统提示：确认要清空吗？", "手动清空",messbutton);
+            if (dr == DialogResult.OK)
+            {
+                //清空缓存区
+                reciveBuffer.Clear();
+
+                reclve_rtb.Text = "";
+            }
+        }
+            
     }
 }

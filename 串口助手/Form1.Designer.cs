@@ -314,6 +314,7 @@
             this.clear_btn.TabIndex = 5;
             this.clear_btn.Text = "手动清空";
             this.clear_btn.UseVisualStyleBackColor = true;
+            this.clear_btn.Click += new System.EventHandler(this.clear_btn_Click);
             // 
             // recuvehex_chb
             // 
@@ -324,6 +325,7 @@
             this.recuvehex_chb.TabIndex = 15;
             this.recuvehex_chb.Text = "十六进制";
             this.recuvehex_chb.UseVisualStyleBackColor = true;
+            this.recuvehex_chb.CheckedChanged += new System.EventHandler(this.recuvehex_chb_CheckedChanged);
             // 
             // auticlear_chb
             // 
