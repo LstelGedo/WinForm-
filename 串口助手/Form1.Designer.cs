@@ -75,6 +75,7 @@
             this.recivecount_tssl = new System.Windows.Forms.ToolStripStatusLabel();
             this.cleancount_tssl = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -117,6 +118,8 @@
             this.send_rtb.Size = new System.Drawing.Size(397, 153);
             this.send_rtb.TabIndex = 6;
             this.send_rtb.Text = "";
+            this.send_rtb.TextChanged += new System.EventHandler(this.send_rtb_TextChanged);
+            this.send_rtb.Leave += new System.EventHandler(this.send_rtb_Leave);
             // 
             // groupBox1
             // 
@@ -336,6 +339,7 @@
             this.auticlear_chb.TabIndex = 14;
             this.auticlear_chb.Text = "自动清空";
             this.auticlear_chb.UseVisualStyleBackColor = true;
+            this.auticlear_chb.CheckedChanged += new System.EventHandler(this.auticlear_chb_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -416,6 +420,7 @@
             this.sendhex_chb.TabIndex = 23;
             this.sendhex_chb.Text = "十六进制";
             this.sendhex_chb.UseVisualStyleBackColor = true;
+            this.sendhex_chb.CheckedChanged += new System.EventHandler(this.sendhex_chb_CheckedChanged);
             // 
             // sendclear_btn
             // 
@@ -425,6 +430,7 @@
             this.sendclear_btn.TabIndex = 24;
             this.sendclear_btn.Text = "清空发送";
             this.sendclear_btn.UseVisualStyleBackColor = true;
+            this.sendclear_btn.Click += new System.EventHandler(this.sendclear_btn_Click);
             // 
             // send_btn
             // 
@@ -507,7 +513,7 @@
             this.toolStripStatusLabel5.Margin = new System.Windows.Forms.Padding(50, 3, 10, 2);
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
             this.toolStripStatusLabel5.Size = new System.Drawing.Size(59, 27);
-            this.toolStripStatusLabel5.Text = "接收次数:";
+            this.toolStripStatusLabel5.Text = "接收计数:";
             // 
             // recivecount_tssl
             // 
@@ -526,6 +532,10 @@
             // 
             this.serialPort1.PortName = "COM3";
             this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -608,6 +618,7 @@
         private System.Windows.Forms.ToolStripStatusLabel recivecount_tssl;
         private System.Windows.Forms.ToolStripStatusLabel cleancount_tssl;
         private System.IO.Ports.SerialPort serialPort1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

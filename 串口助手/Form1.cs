@@ -24,7 +24,13 @@ namespace 串口助手
         //缓存区用户编码转换
         private List<byte> reciveBuffer = new List<byte>();
 
+        //定义接收管理器
+        private List<byte>sendBuffer = new List<byte>();
+
         private int reciveCount = 0;
+
+        //发送计数
+        private int sendCount = 0;
 
         public Form1()
         {
@@ -167,6 +173,14 @@ namespace 串口助手
         }
 
 
+        private void sendData() 
+        {
+            //将serialPort的内容发送出去
+            serialPort1.Write(sendBuffer.ToArray(),0,sendBuffer.Count);
+            sendCount += sendBuffer.Count;
+            recivecount_tssl.Text = sendCount.ToString();
+
+        }
 
         //手动发送
         private void send_btn_Click(object sender, EventArgs e)
@@ -183,7 +197,9 @@ namespace 串口助手
             //判断发送的数据是否为空
             if (this.send_rtb.Text != "")
             {
-                serialPort1.Write(send_rtb.Text);
+                //serialPort1.Write(send_rtb.Text);
+                Console.WriteLine(Transform.ToHexString(sendBuffer.ToArray()));
+                sendData();
             }
             else 
             {
@@ -217,6 +233,11 @@ namespace 串口助手
             //异步线程更新
             this.Invoke(new EventHandler(delegate 
             {
+
+                //更新接收次数
+                recivecount_tssl.Text = reciveCount.ToString();
+
+
                 //判断是否是16进制
                 if (!recuvehex_chb.Checked)
                 {
@@ -298,9 +319,109 @@ namespace 串口助手
                 //清空缓存区
                 reciveBuffer.Clear();
 
+                //清空计数器
+                recivecount_tssl.Text = "0";
+
                 reclve_rtb.Text = "";
             }
         }
-            
+
+
+        //自动清空
+        private void auticlear_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            //判断是否选中状态
+            if (autosend_chb.Checked)
+            {
+                timer1.Stop();
+            }
+            else
+            {
+                
+                timer1.Start();
+            }
+        }
+
+
+        //Timer计时事件
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (reclve_rtb.Text.Length > 4096)
+            {
+                reciveBuffer.Clear();
+                reclve_rtb.Text = "";
+            }
+        }
+
+
+
+        //发送框-离开焦点事件
+        private void send_rtb_Leave(object sender, EventArgs e)
+        {
+
+            //判断是否选中16进制格式
+            if (sendhex_chb.CheckState == CheckState.Checked)
+            {
+                if (DataEncoding.IsHexString(send_rtb.Text.Replace(" ","")))
+                {
+                    sendBuffer.Clear();
+
+                    //将send_rtb的数据转换为16进制保存到sendBuffer里
+                    sendBuffer.AddRange(Transform.ToBytes(send_rtb.Text.Replace(" ","")));
+
+                }
+                else
+                {
+                    MessageBox.Show("请输入正确的十六进制数据！");
+                    send_rtb.Select();
+                }
+            }
+            else
+            {
+                sendBuffer.Clear();
+                sendBuffer.AddRange(Encoding.GetEncoding("gb2312").GetBytes(send_rtb.Text));
+
+            }
+
+        }
+
+        //发送框-文本改变
+        private void send_rtb_TextChanged(object sender, EventArgs e)
+        {
+             //十六进制切换，会出现问题，这个问题接收0x00 转换
+
+        }
+
+
+        //发送16进制-勾选框
+        private void sendhex_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            //如果发生框等于空的时候就停止
+            if (send_rtb.Text == "")
+            {
+                return;
+            }
+
+
+            //判断发送的16进制框是否勾选
+            if (sendhex_chb.Checked == true)
+            {
+                //将缓存区的数据发送过去 每个字符用空格隔开
+                send_rtb.Text = Transform.ToHexString(sendBuffer.ToArray()," ");
+            }
+            else
+            {
+                send_rtb.Text = Encoding.GetEncoding("gb2312").GetString(sendBuffer.ToArray()).Replace("\0","\\0");
+            }
+        }
+
+        //清空发送
+        private void sendclear_btn_Click(object sender, EventArgs e)
+        {
+            sendBuffer.Clear();
+            send_rtb.Text = "0";
+            sendCount = 0;
+            recivecount_tssl.Text = "0";
+        }
     }
 }
