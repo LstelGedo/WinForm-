@@ -317,7 +317,7 @@ namespace 串口助手
                     }
                 }
             }
-            if (mode == DataCheck.BigOrLittle.LittleEndian)
+            if (mode == DataCheck.BigOrLittle.BigEndian)
 
                 return BitConverter.GetBytes(check);
             else

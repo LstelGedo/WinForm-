@@ -335,7 +335,12 @@ namespace 串口助手
                                 //数据校验
                                 if (crc_chech(frameBuffer))
                                 {
-
+                                    Console.WriteLine("frame is check ok,pick it");
+                                    data_txb.Text = Transform.ToHexString(frameBuffer);
+                                    data1_txb.Text = string.Format("{0:X2}", frameBuffer[2]);
+                                    data2_txb.Text = string.Format("{0:X2}", frameBuffer[3]);
+                                    data3_txb.Text = string.Format("{0:X2}", frameBuffer[4]);
+                                    data4_txb.Text = string.Format("{0:X2}", frameBuffer[5]);
                                 }
                                 else
                                 {
@@ -368,9 +373,40 @@ namespace 串口助手
             //MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
         }
 
+        //解析帧
         private bool crc_chech(byte[] frameBuffer)
         {
-            throw new NotImplementedException();
+            /*
+                大端模式:是指数据的高字节保存在内容的低地址中，
+                    而数据的低字节保存在内存的高地址中，这样的存储模式有点儿类
+                类似于吧数据当做字符串处理顺序：地址由小向大增加而数据从高位往
+            低位放：这和我们阅读习惯一致。
+
+                小端模式：是指数据的高字节保存在内存的高地址中，
+            而数据的低字节保存在内存的低地址中，这种存储模式将地址的高低和数据位权
+            有效的结合起来，高地址部分权高，低地址部分权低。
+             */
+
+            bool ret = false;
+
+
+            //获取数据
+            byte[] temp = new byte[frameBuffer.Length-2];
+
+            //将数据拷贝过来
+            Array.Copy(frameBuffer, 0, temp, 0, temp.Length);
+
+            //缓存校验值
+            byte[] crcdata = DataCheck.DataCrc16Full_Ccitt(temp,DataCheck.BigOrLittle.BigEndian);
+
+            if (crcdata[0] == frameBuffer[frameBuffer.Length - 2]&&
+                crcdata[1] == frameBuffer[frameBuffer.Length - 1])
+            {
+                //check ok
+                ret = true;
+            }
+
+            return ret;
         }
 
 
