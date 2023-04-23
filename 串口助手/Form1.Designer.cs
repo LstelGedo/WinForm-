@@ -76,12 +76,27 @@
             this.cleancount_tssl = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.startData_chb = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.data1_txb = new System.Windows.Forms.TextBox();
+            this.data4_txb = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.data3_txb = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.data2_txb = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.data_txb = new System.Windows.Forms.RichTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -474,7 +489,7 @@
             this.cleancount_tssl});
             this.statusStrip1.Location = new System.Drawing.Point(0, 619);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(694, 32);
+            this.statusStrip1.Size = new System.Drawing.Size(934, 32);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -537,11 +552,144 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.data_txb);
+            this.groupBox6.Controls.Add(this.label13);
+            this.groupBox6.Controls.Add(this.label12);
+            this.groupBox6.Controls.Add(this.label11);
+            this.groupBox6.Controls.Add(this.data2_txb);
+            this.groupBox6.Controls.Add(this.label10);
+            this.groupBox6.Controls.Add(this.data3_txb);
+            this.groupBox6.Controls.Add(this.label9);
+            this.groupBox6.Controls.Add(this.data4_txb);
+            this.groupBox6.Controls.Add(this.label8);
+            this.groupBox6.Controls.Add(this.data1_txb);
+            this.groupBox6.Controls.Add(this.label7);
+            this.groupBox6.Controls.Add(this.startData_chb);
+            this.groupBox6.Location = new System.Drawing.Point(690, 12);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(232, 426);
+            this.groupBox6.TabIndex = 21;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "指令解析";
+            // 
+            // startData_chb
+            // 
+            this.startData_chb.AutoSize = true;
+            this.startData_chb.Location = new System.Drawing.Point(12, 159);
+            this.startData_chb.Name = "startData_chb";
+            this.startData_chb.Size = new System.Drawing.Size(108, 16);
+            this.startData_chb.TabIndex = 15;
+            this.startData_chb.Text = "启动数据帧接收";
+            this.startData_chb.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 19);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 12);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "数据1:";
+            // 
+            // data1_txb
+            // 
+            this.data1_txb.Location = new System.Drawing.Point(57, 15);
+            this.data1_txb.Name = "data1_txb";
+            this.data1_txb.Size = new System.Drawing.Size(166, 21);
+            this.data1_txb.TabIndex = 21;
+            // 
+            // data4_txb
+            // 
+            this.data4_txb.Location = new System.Drawing.Point(57, 118);
+            this.data4_txb.Name = "data4_txb";
+            this.data4_txb.Size = new System.Drawing.Size(166, 21);
+            this.data4_txb.TabIndex = 23;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(10, 122);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 12);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "数据4:";
+            // 
+            // data3_txb
+            // 
+            this.data3_txb.Location = new System.Drawing.Point(57, 81);
+            this.data3_txb.Name = "data3_txb";
+            this.data3_txb.Size = new System.Drawing.Size(166, 21);
+            this.data3_txb.TabIndex = 25;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(10, 85);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(41, 12);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "数据3:";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
+            // 
+            // data2_txb
+            // 
+            this.data2_txb.Location = new System.Drawing.Point(57, 46);
+            this.data2_txb.Name = "data2_txb";
+            this.data2_txb.Size = new System.Drawing.Size(166, 21);
+            this.data2_txb.TabIndex = 27;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(10, 50);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(41, 12);
+            this.label10.TabIndex = 26;
+            this.label10.Text = "数据2:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 354);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(131, 12);
+            this.label11.TabIndex = 28;
+            this.label11.Text = "格式:7F+长度+数据+CRC";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(10, 384);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(131, 12);
+            this.label12.TabIndex = 29;
+            this.label12.Text = "例如:7f0431323334DE10";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(10, 195);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(47, 12);
+            this.label13.TabIndex = 30;
+            this.label13.Text = "数据帧:";
+            // 
+            // data_txb
+            // 
+            this.data_txb.Location = new System.Drawing.Point(12, 212);
+            this.data_txb.Name = "data_txb";
+            this.data_txb.Size = new System.Drawing.Size(211, 128);
+            this.data_txb.TabIndex = 31;
+            this.data_txb.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(694, 651);
+            this.ClientSize = new System.Drawing.Size(934, 651);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -551,7 +699,7 @@
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(710, 690);
+            this.MaximumSize = new System.Drawing.Size(950, 690);
             this.MinimumSize = new System.Drawing.Size(710, 690);
             this.Name = "Form1";
             this.Text = "串口模拟";
@@ -566,6 +714,8 @@
             this.groupBox5.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -619,6 +769,20 @@
         private System.Windows.Forms.ToolStripStatusLabel cleancount_tssl;
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox startData_chb;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox data2_txb;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox data3_txb;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox data4_txb;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox data1_txb;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.RichTextBox data_txb;
     }
 }
 

@@ -29,6 +29,15 @@ namespace 串口助手
 
         private int reciveCount = 0;
 
+        //用于数据帧接收
+        private Queue<byte> bufferQueue = null;
+
+        //用于帧头数据
+        private bool isHeadRecive = false;
+
+        //用于缓存帧长度
+        private int frameLenth = 0;
+
         //发送计数
         private int sendCount = 0;
 
@@ -48,6 +57,9 @@ namespace 串口助手
         private void Form1_Load(object sender, EventArgs e)
         {
             serialLoad();
+
+            //实例化
+            bufferQueue = new Queue<byte>();
         }
        
 
@@ -238,38 +250,132 @@ namespace 串口助手
                 recivecount_tssl.Text = reciveCount.ToString();
 
 
-                //判断是否是16进制
-                if (!recuvehex_chb.Checked)
+                //判断是否勾选数据帧接收
+                if (startData_chb.Checked == false)
                 {
-                    //获取字符串string
-                    string str = Encoding.GetEncoding("gb2312").GetString(dataTemp);
+                    //判断是否是16进制
+                    if (!recuvehex_chb.Checked)
+                    {
+                        //获取字符串string
+                        string str = Encoding.GetEncoding("gb2312").GetString(dataTemp);
 
-                    // 0x00 -> \0 结束 不会显示
+                        // 0x00 -> \0 结束 不会显示
 
-                    //转译
-                    str = str.Replace("\0", "\\0");
+                        //转译
+                        str = str.Replace("\0", "\\0");
 
-                    reclve_rtb.AppendText(str);
+                        reclve_rtb.AppendText(str);
 
-                    //方法一致二选一
-                    //reclve_rtb.AppendText(Encoding.GetEncoding("gb2312").GetString(dataTemp).Replace("\0", "\\0"));
+                        //方法一致二选一
+                        //reclve_rtb.AppendText(Encoding.GetEncoding("gb2312").GetString(dataTemp).Replace("\0", "\\0"));
+                    }
+                    else
+                    {
+                        //当16进制是选中的姿态下
+                        //将接收到的dataTemp转换到16进制
+                        reclve_rtb.AppendText(Transform.ToHexString(dataTemp, " "));
+
+
+                    }
                 }
+
                 else
                 {
-                    //当16进制是选中的姿态下
-                    //将接收到的dataTemp转换到16进制
-                    reclve_rtb.AppendText(Transform.ToHexString(dataTemp," "));
+                    //解析数据  queue
+                    //将dataTemp的数据处方到队列中
+                    foreach (byte item in dataTemp)
+                    {
+                        bufferQueue.Enqueue(item);
+                    }
+
+                    //解析获取帧头
+                    //判断是否存在帧头数据
+                    if (isHeadRecive == false)
+                    {
+                        foreach (byte item in bufferQueue.ToArray()) 
+                        {
+                            if (item != 0x7f) 
+                            {
+                                //出列
+                                bufferQueue.Dequeue();
+                                Console.WriteLine("not 0x7f,Dequeue !!");
+                            }
+                            else
+                            {
+                                //get 0x7f from bufferQueue
+                                isHeadRecive = true;
+                                Console.WriteLine("0x7f is recived !!");
+                                break;
+                            }
+                        }
+                    }
+
+                    //在数据帧头存在的时候就判断长度
+                    if (isHeadRecive == true)
+                    {
+                        //判断有数据帧长度
+                        if (bufferQueue.Count >= 2)
+                        {
+                            Console.WriteLine(DateTime.Now.ToLongTimeString());
+                            Console.WriteLine($"show the data in bufferQueue{Transform.ToHexString(bufferQueue.ToArray())}");
+                            //判断长度是否正确
+                            Console.WriteLine($"frame lenth = {String.Format("{0:X2}", bufferQueue.ToArray())}");
+                           
+                            //帧长度
+                            frameLenth = bufferQueue.ToArray()[1];
+
+                            //一帧完整的数据长度判断，不代表数据是正确的
+                            if (bufferQueue.Count >=1+1+frameLenth +2)
+                            {
+                                byte[] frameBuffer = new byte[1 + 1 + frameLenth + 2];
+
+                                //将buff数组从第0位拷贝到framebuff的第0位开始-数据长度邓毅frameBuffer的长度
+                                Array.Copy(bufferQueue.ToArray(), 0, frameBuffer, 0, frameBuffer.Length);
+
+                                //数据校验
+                                if (crc_chech(frameBuffer))
+                                {
+
+                                }
+                                else
+                                {
+                                    //无效数据直接跳过-提示
+                                    Console.WriteLine("bad frame,drop it");
+                                }
+
+                                for (int i = 0; i < 1+frameLenth+2; i++) 
+                                {
+                                    bufferQueue.Dequeue();
+                                    
+                                }
+                                isHeadRecive = false;
+                            }
+
+                        }
+                        
+                        //长度不正确的时候继续接收数据
+
+                    }
 
 
                 }
 
 
-                
+
             }));
 
 
             //MessageBox.Show("端口号："+serialPort1.PortName+"已发送数据："+dataRecive);
         }
+
+        private bool crc_chech(byte[] frameBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
 
         //暂停
         private void stop_btn_Click(object sender, EventArgs e)
@@ -422,6 +528,11 @@ namespace 串口助手
             send_rtb.Text = "0";
             sendCount = 0;
             recivecount_tssl.Text = "0";
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
