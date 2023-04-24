@@ -46,6 +46,7 @@ namespace 串口助手
 
         public event TransmitEventHandler TransmitData2;
 
+        public DecodedDataContext ddc;
 
         public Form1()
         {
@@ -78,7 +79,11 @@ namespace 串口助手
 
             //接收数据事件窗体2 ReciveData执行显示
             fr2.useForm1send2 += new TransmitEventHandler(sendbytes2);
-            fr2.Show();
+            //fr2.Show();
+
+            //数据解析
+            ddc = new DecodedDataContext(new SimpleDecodedDataFrame());
+
         }
 
         private void sendbytes2(object sender, TransmitEventAgrs e)
@@ -282,7 +287,7 @@ namespace 串口助手
             //  ?. 如果taansmintData  != null就执行
             //TransmitData?.Invoke(dataTemp);
 
-            TransmitData2?.Invoke(this, new TransmitEventAgrs { data = dataTemp });
+            //TransmitData2?.Invoke(this, new TransmitEventAgrs { data = dataTemp });
 
 
             //异步线程更新
@@ -328,9 +333,28 @@ namespace 串口助手
                     //将dataTemp的数据处方到队列中
                     foreach (byte item in dataTemp)
                     {
+                        //入列
                         bufferQueue.Enqueue(item);
                     }
 
+                    //获取帧数据
+                    byte[] frameData = ddc.getDataFrames(bufferQueue);
+                    if (frameData != null)
+                    {
+                        Console.WriteLine($"show the data in frameData{Transform.ToHexString(frameData)}");
+                        data_txb.Text = Transform.ToHexString(frameData);
+                        data1_txb.Text = String.Format("{0:X2}", frameData[2]);
+                        data2_txb.Text = String.Format("{0:X2}", frameData[3]);
+                        data3_txb.Text = String.Format("{0:X2}", frameData[4]);
+                        data4_txb.Text = String.Format("{0:X2}", frameData[5]);
+
+                        for (int i = 0; i < frameData.Length; i++)
+                        {
+                            bufferQueue.Dequeue();
+
+                        }   
+                    }
+#if old
                     //解析获取帧头
                     //判断是否存在帧头数据
                     if (isHeadRecive == false)
@@ -401,6 +425,7 @@ namespace 串口助手
                         //长度不正确的时候继续接收数据
 
                     }
+#endif
 
 
                 }
