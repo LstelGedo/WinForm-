@@ -318,10 +318,7 @@ namespace 串口助手
                         {
                             Console.WriteLine(DateTime.Now.ToLongTimeString());
                             Console.WriteLine($"show the data in bufferQueue{Transform.ToHexString(bufferQueue.ToArray())}");
-                            //判断长度是否正确
-                            Console.WriteLine($"frame lenth = {String.Format("{0:X2}", bufferQueue.ToArray())}");
-                           
-                            //帧长度
+                            Console.WriteLine($"frame lenth ={String.Format("{0:X2}", bufferQueue.ToArray()[1])}");
                             frameLenth = bufferQueue.ToArray()[1];
 
                             //一帧完整的数据长度判断，不代表数据是正确的
@@ -337,10 +334,10 @@ namespace 串口助手
                                 {
                                     Console.WriteLine("frame is check ok,pick it");
                                     data_txb.Text = Transform.ToHexString(frameBuffer);
-                                    data1_txb.Text = string.Format("{0:X2}", frameBuffer[2]);
-                                    data2_txb.Text = string.Format("{0:X2}", frameBuffer[3]);
-                                    data3_txb.Text = string.Format("{0:X2}", frameBuffer[4]);
-                                    data4_txb.Text = string.Format("{0:X2}", frameBuffer[5]);
+                                    data1_txb.Text = String.Format("{0:X2}", frameBuffer[2]);
+                                    data2_txb.Text = String.Format("{0:X2}", frameBuffer[3]);
+                                    data3_txb.Text = String.Format("{0:X2}", frameBuffer[4]);
+                                    data4_txb.Text = String.Format("{0:X2}", frameBuffer[5]);
                                 }
                                 else
                                 {
@@ -389,20 +386,13 @@ namespace 串口助手
 
             bool ret = false;
 
-
-            //获取数据
-            byte[] temp = new byte[frameBuffer.Length-2];
-
-            //将数据拷贝过来
+            byte[] temp = new byte[frameBuffer.Length - 2];
             Array.Copy(frameBuffer, 0, temp, 0, temp.Length);
-
-            //缓存校验值
-            byte[] crcdata = DataCheck.DataCrc16Full_Ccitt(temp,DataCheck.BigOrLittle.BigEndian);
-
-            if (crcdata[0] == frameBuffer[frameBuffer.Length - 2]&&
+            byte[] crcdata = DataCheck.DataCrc16_Ccitt(temp, DataCheck.BigOrLittle.BigEndian);
+            if (crcdata[0] == frameBuffer[frameBuffer.Length - 2] &&
                 crcdata[1] == frameBuffer[frameBuffer.Length - 1])
             {
-                //check ok
+                // check ok
                 ret = true;
             }
 

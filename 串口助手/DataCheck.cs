@@ -27,7 +27,7 @@ namespace 串口助手
             //大端
             BigEndian = 0,
             //小端
-            LittleEndian=1
+            LittleEndian = 1
         }
 
         #region 数据翻转
@@ -77,7 +77,7 @@ namespace 串口助手
         {
             return (UInt16)((value & 0xFFU) << 8 | (value & 0xFF00U) >> 8);
         }
- 
+
         /// <summary>
         /// 翻转字节顺序 (32-bit)
         /// </summary>
@@ -116,7 +116,7 @@ namespace 串口助手
             byte check = 0;
             for (int i = 0; i < data.Length; i++)
             {
-                check ^=  data[i];
+                check ^= data[i];
             }
             return new byte[] { check };
         }
@@ -147,7 +147,7 @@ namespace 串口助手
             {
                 check = (byte)((check + data[i]) % 0xff);
             }
-            check = (byte)(0XFF-check);
+            check = (byte)(0XFF - check);
             //返回累加校验和
             return new byte[] { check };
         }
@@ -181,7 +181,7 @@ namespace 串口助手
             }
             //返回累加校验和
             if (mode == DataCheck.BigOrLittle.LittleEndian)
-                
+
                 return BitConverter.GetBytes(ReverseBytes((UInt16)num));
             else
                 return BitConverter.GetBytes((UInt16)num);
@@ -193,9 +193,9 @@ namespace 串口助手
         /// <param name="data">要校验的数据数组</param>  
         /// <param name="mode">大小端模式</param>
         /// <returns>校验的数据数组+校验和</returns>  
-        public static byte[] DataSum16Full(byte[] data,DataCheck.BigOrLittle mode)
+        public static byte[] DataSum16Full(byte[] data, DataCheck.BigOrLittle mode)
         {
-            byte[] check = DataSum16(data,mode);
+            byte[] check = DataSum16(data, mode);
             List<byte> newdata = new List<byte>();
             newdata.AddRange(data);
             newdata.AddRange(check);
@@ -269,7 +269,7 @@ namespace 串口助手
                     }
                 }
             }
-            if (mode == DataCheck.BigOrLittle.LittleEndian)
+            if (mode == DataCheck.BigOrLittle.BigEndian)
 
                 return BitConverter.GetBytes(ReverseBytes(check));
             else
@@ -317,7 +317,7 @@ namespace 串口助手
                     }
                 }
             }
-            if (mode == DataCheck.BigOrLittle.BigEndian)
+            if (mode == DataCheck.BigOrLittle.LittleEndian)
 
                 return BitConverter.GetBytes(check);
             else
