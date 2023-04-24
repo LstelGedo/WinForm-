@@ -44,6 +44,8 @@ namespace 串口助手
         //委托
         public TransmitData TransmitData;
 
+        public event TransmitEventHandler TransmitData2;
+
 
         public Form1()
         {
@@ -68,11 +70,22 @@ namespace 串口助手
             Form2 fr2 = new Form2();
 
             //接收数据委托窗体2 ReciveData 执行显示
-            TransmitData = fr2.ReciveData;
+          //  TransmitData = fr2.ReciveData;
+            TransmitData2 += new TransmitEventHandler(fr2.ReciveData2);
 
             //窗体2发送委托窗体1 sendBytes 执行发送
-            fr2.useForlSend = sendBytes;
+            //fr2.useForlSend += sendBytes;
+
+            //接收数据事件窗体2 ReciveData执行显示
+            fr2.useForm1send2 += new TransmitEventHandler(sendbytes2);
             fr2.Show();
+        }
+
+        private void sendbytes2(object sender, TransmitEventAgrs e)
+        {
+            serialPort1.Write(e.data, 0, e.data.Length);
+            sendCount += e.data.Length;
+            sencount_tssl.Text = sendCount.ToString();
         }
 
         //子页面委托方法
@@ -267,8 +280,9 @@ namespace 串口助手
             
             //委托-用于将主页面的内容委托到子页面
             //  ?. 如果taansmintData  != null就执行
-            TransmitData?.Invoke(dataTemp);
+            //TransmitData?.Invoke(dataTemp);
 
+            TransmitData2?.Invoke(this, new TransmitEventAgrs { data = dataTemp });
 
 
             //异步线程更新

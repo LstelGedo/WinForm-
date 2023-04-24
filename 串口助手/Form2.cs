@@ -16,6 +16,9 @@ namespace 串口助手
         public TransmitData useForlSend;
 
 
+        public event TransmitEventHandler useForm1send2;
+
+
 
 
         public Form2()
@@ -32,9 +35,24 @@ namespace 串口助手
             richTextBox1.AppendText(str);
         }
 
+
+
+
+        internal void ReciveData2(object sender, TransmitEventAgrs e)
+        {
+            string str = Encoding.GetEncoding("gb2312").GetString(e.data);
+
+            MessageBox.Show(str);
+        }
+
+
+
+
         private void button1_Click(object sender, EventArgs e)
         {
-            useForlSend?.Invoke(Encoding.GetEncoding("gb2312").GetBytes(textBox1.Text));
+            byte[] dataTemp = Encoding.GetEncoding("gb2312").GetBytes(textBox1.Text);
+            useForlSend?.Invoke(dataTemp);
+            useForm1send2.Invoke(this,new TransmitEventAgrs { data = dataTemp}); 
         }
     }
 }
