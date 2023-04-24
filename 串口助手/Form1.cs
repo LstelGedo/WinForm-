@@ -41,6 +41,10 @@ namespace 串口助手
         //发送计数
         private int sendCount = 0;
 
+        //委托
+        public TransmitData TransmitData;
+
+
         public Form1()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -60,8 +64,25 @@ namespace 串口助手
 
             //实例化
             bufferQueue = new Queue<byte>();
+
+            Form2 fr2 = new Form2();
+
+            //接收数据委托窗体2 ReciveData 执行显示
+            TransmitData = fr2.ReciveData;
+
+            //窗体2发送委托窗体1 sendBytes 执行发送
+            fr2.useForlSend = sendBytes;
+            fr2.Show();
         }
-       
+
+        //子页面委托方法
+        private void sendBytes(byte[] data)
+        {
+            serialPort1.Write(data, 0, data.Length);
+            sendCount += data.Length;
+            sencount_tssl.Text = sendCount.ToString();
+        }
+
 
         //打开串口
         private void open_btn_Click(object sender, EventArgs e)
@@ -241,6 +262,14 @@ namespace 串口助手
 
             //记录长度（用于更新记录接收记录）
             reciveCount += dataTemp.Length;
+
+
+            
+            //委托-用于将主页面的内容委托到子页面
+            //  ?. 如果taansmintData  != null就执行
+            TransmitData?.Invoke(dataTemp);
+
+
 
             //异步线程更新
             this.Invoke(new EventHandler(delegate 
@@ -453,6 +482,8 @@ namespace 串口助手
 
                 //清空计数器
                 recivecount_tssl.Text = "0";
+
+                reciveCount = 0;
 
                 reclve_rtb.Text = "";
             }
