@@ -831,7 +831,7 @@ namespace 串口助手
         {
             if (strRead == "")
             {
-                MessageBox.Show("请先选择文件!");
+                MessageBox.Show("请先选择文件!!");
                 return;
             }
 
