@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -47,6 +49,8 @@ namespace 串口助手
         public event TransmitEventHandler TransmitData2;
 
         public DecodedDataContext ddc;
+
+        public string strRead { get; private set; }
 
         public Form1()
         {
@@ -160,7 +164,7 @@ namespace 串口助手
                     //按钮状态
                     isOpen = true;
                     open_btn.Text = "关闭串口";
-
+                    
                     MessageBox.Show("端口号:" + serialPort1.PortName + "启动完成");
 
                 }
@@ -629,6 +633,237 @@ namespace 串口助手
         private void label9_Click(object sender, EventArgs e)
         {
 
+        }
+        
+
+
+
+        //自动发送
+        private void autosend_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            //串口未打开
+            if(serialPort1.IsOpen == false && autosend_chb.CheckState == CheckState.Checked) 
+            {
+                autosend_chb.CheckState = CheckState.Unchecked;
+                if (timer2 != null)
+                {
+                    timer2.Enabled = false;
+                    timer2.Stop();
+                    timer2 = null;
+                }
+
+                MessageBox.Show("发送失败，串口未打开");
+                return;
+            }
+
+            //串口打开
+            if (serialPort1.IsOpen == true && autosend_chb.CheckState == CheckState.Checked)
+            {
+                if (send_rtb.Text == "")
+                {
+                    auticlear_chb.Checked = true;
+                    MessageBox.Show("请先输入要发送的内容","警告");
+                    return;
+                }
+
+                string auto = autotimer_txb.Text.ToString();
+                int Box = Convert.ToInt32(auto);
+
+                if (Box < 1000)
+                {
+                    autotimer_txb.Text = "1000";
+                    MessageBox.Show("自动发送数据的周期范围是60-1000毫秒", "警告");
+                    autosend_chb.Checked = true;
+                    return;
+                }
+
+                //定时发生
+                autotimer_txb.Enabled = false;
+                send_btn.Enabled = false;
+                int i = Convert.ToInt32(autotimer_txb.Text);
+                if (i < 10 || i > 60 * 1000)
+                {
+                    i = 1000;
+                    autotimer_txb.Text = "1000";
+                    MessageBox.Show("自动发送数据的周期范围是10-60000毫秒", "警告");
+                }
+                timer2.Interval = i;
+                timer2.Start();
+
+            }
+            else
+            {
+                send_btn.Enabled = true;
+                autotimer_txb.Enabled = true;
+                if (timer2 != null)
+                {
+                    timer2.Stop();
+                    //timer2 = null;
+                }
+            }
+        }
+
+        //定时器2
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            //如果发送的数据不为空，则接收
+            if (this.send_rtb.Text != "" && serialPort1.IsOpen)
+            {
+                Console.WriteLine(Transform.ToHexString(sendBuffer.ToArray()));
+                sendData();
+            }
+            else
+            {
+                //输出到状态 栏
+                state_tssl.Text = "请先输入发送的数据!";
+                //Console.WriteLine("请先输入在发送数据");
+            }
+        }
+
+        //清空计数
+        private void cleancount_tssl_Click(object sender, EventArgs e)
+        {
+            //清空发送
+            sendBuffer.Clear();
+            sendCount = 0;
+            sencount_tssl.Text = "0";
+
+
+            //清空接收
+            reciveBuffer.Clear();
+            reclve_rtb.Text = "";
+            recivecount_tssl.Text = "0";
+        }
+
+
+        //DTR发送格式
+        private void DTR_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DTR_chb.CheckState == CheckState.Checked)
+            {
+                serialPort1.DtrEnable = true;
+            }
+            else
+            {
+                serialPort1.DtrEnable = false;
+            }
+        }
+        //RTS发送格式
+        private void RTS_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (RTS_chb.CheckState == CheckState.Checked)
+            {
+                serialPort1.RtsEnable = true;
+            }
+            else
+            {
+                serialPort1.RtsEnable = false;
+            }
+        }
+        
+
+
+        //选择路径 
+        private void xzlj_btn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbDialog = new FolderBrowserDialog();
+            if (fbDialog.ShowDialog() == DialogResult.OK)
+            {
+                reciveflie_txb.Text = fbDialog.SelectedPath;
+            }
+        }
+
+        //保存数据
+        private void bcsj_btn_Click(object sender, EventArgs e)
+        {
+            if (reclve_rtb.Text == "") return;
+           
+            //文件名
+            string fileName = reciveflie_txb.Text+"\\"+DateTime.Now.ToString("yyyyMMddhhmmss")+".txt";
+
+            //数据流
+            //fileName路径
+            StreamWriter sw = new StreamWriter(fileName);
+
+            //将接收框的内容写到txt里
+            sw.Write(reclve_rtb.Text);
+
+            //输出
+            sw.Flush();
+            sw.Close();
+            MessageBox.Show("保存成功");
+        }
+
+        /// <summary>
+        /// 加载文本到发送框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //打开文件
+        private void dkwj_btn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofDialog = new OpenFileDialog();
+
+            ofDialog.Title = "请选择文件";
+
+            //格式过滤
+            ofDialog.Filter = "文本文件(*.txt)|*.txt";
+
+            //路径记录，下次打开的时候默认回到上一次路径
+            ofDialog.RestoreDirectory = true;
+            if (ofDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = ofDialog.FileName;
+
+                //显示到文本框
+                sendfile_txb.Text = fileName;
+                StreamReader sr = new StreamReader(fileName, Encoding.GetEncoding("gb2312"));
+                
+                //读取
+                strRead = sr.ReadToEnd();
+                send_rtb.Text = strRead;
+                sr.Close();
+            }
+        }
+        
+       
+        private void fswj_btn_Click(object sender, EventArgs e)
+        {
+            if (strRead == "")
+            {
+                MessageBox.Show("请先选择文件!");
+                return;
+            }
+
+            //发送数据
+            try
+            {
+                //数据长度控制
+                byte[] data = Encoding.GetEncoding("gb2312").GetBytes(strRead);
+                sendCount += data.Length;
+                sencount_tssl.Text = sendCount.ToString();
+
+                //win窗口能发送最大的数据
+                int pagenum = data.Length / 4096;
+                int remaind = data.Length % 4096;
+                for (int i = 0; i < pagenum; i++)
+                {
+                    serialPort1.Write(data, (i * 4096), 4096);
+                    //延时
+                    Thread.Sleep(10);
+                }
+
+                //如果还有数据就继续发送
+                if (remaind >0)
+                {
+                    serialPort1.Write(data,(pagenum * 4096), remaind);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("发送数据失败" + ex.Message.ToString(),"错误消息");
+            }
         }
     }
 }

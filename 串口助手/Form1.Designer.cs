@@ -77,19 +77,20 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.startData_chb = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.data1_txb = new System.Windows.Forms.TextBox();
-            this.data4_txb = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.data3_txb = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.data_txb = new System.Windows.Forms.RichTextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.data2_txb = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.data_txb = new System.Windows.Forms.RichTextBox();
+            this.data3_txb = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.data4_txb = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.data1_txb = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.startData_chb = new System.Windows.Forms.CheckBox();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -177,6 +178,7 @@
             this.DTR_chb.TabIndex = 11;
             this.DTR_chb.Text = "DTR";
             this.DTR_chb.UseVisualStyleBackColor = true;
+            this.DTR_chb.CheckedChanged += new System.EventHandler(this.DTR_chb_CheckedChanged);
             // 
             // RTS_chb
             // 
@@ -187,6 +189,7 @@
             this.RTS_chb.TabIndex = 10;
             this.RTS_chb.Text = "RTS";
             this.RTS_chb.UseVisualStyleBackColor = true;
+            this.RTS_chb.CheckedChanged += new System.EventHandler(this.RTS_chb_CheckedChanged);
             // 
             // label6
             // 
@@ -297,6 +300,7 @@
             this.xzlj_btn.TabIndex = 20;
             this.xzlj_btn.Text = "选择路径";
             this.xzlj_btn.UseVisualStyleBackColor = true;
+            this.xzlj_btn.Click += new System.EventHandler(this.xzlj_btn_Click);
             // 
             // reciveflie_txb
             // 
@@ -313,6 +317,7 @@
             this.bcsj_btn.TabIndex = 17;
             this.bcsj_btn.Text = "保存数据";
             this.bcsj_btn.UseVisualStyleBackColor = true;
+            this.bcsj_btn.Click += new System.EventHandler(this.bcsj_btn_Click);
             // 
             // stop_btn
             // 
@@ -399,6 +404,7 @@
             this.dkwj_btn.TabIndex = 27;
             this.dkwj_btn.Text = "打开文件";
             this.dkwj_btn.UseVisualStyleBackColor = true;
+            this.dkwj_btn.Click += new System.EventHandler(this.dkwj_btn_Click);
             // 
             // fswj_btn
             // 
@@ -408,6 +414,7 @@
             this.fswj_btn.TabIndex = 25;
             this.fswj_btn.Text = "发送文件";
             this.fswj_btn.UseVisualStyleBackColor = true;
+            this.fswj_btn.Click += new System.EventHandler(this.fswj_btn_Click);
             // 
             // sendfile_txb
             // 
@@ -425,6 +432,7 @@
             this.autosend_chb.TabIndex = 22;
             this.autosend_chb.Text = "自动发送";
             this.autosend_chb.UseVisualStyleBackColor = true;
+            this.autosend_chb.CheckedChanged += new System.EventHandler(this.autosend_chb_CheckedChanged);
             // 
             // sendhex_chb
             // 
@@ -542,6 +550,7 @@
             this.cleancount_tssl.Name = "cleancount_tssl";
             this.cleancount_tssl.Size = new System.Drawing.Size(56, 27);
             this.cleancount_tssl.Text = "清空计数";
+            this.cleancount_tssl.Click += new System.EventHandler(this.cleancount_tssl_Click);
             // 
             // serialPort1
             // 
@@ -574,47 +583,56 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "指令解析";
             // 
-            // startData_chb
+            // data_txb
             // 
-            this.startData_chb.AutoSize = true;
-            this.startData_chb.Location = new System.Drawing.Point(12, 159);
-            this.startData_chb.Name = "startData_chb";
-            this.startData_chb.Size = new System.Drawing.Size(108, 16);
-            this.startData_chb.TabIndex = 15;
-            this.startData_chb.Text = "启动数据帧接收";
-            this.startData_chb.UseVisualStyleBackColor = true;
+            this.data_txb.Location = new System.Drawing.Point(12, 212);
+            this.data_txb.Name = "data_txb";
+            this.data_txb.Size = new System.Drawing.Size(211, 128);
+            this.data_txb.TabIndex = 31;
+            this.data_txb.Text = "";
             // 
-            // label7
+            // label13
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 19);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 12);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "数据1:";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(10, 195);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(47, 12);
+            this.label13.TabIndex = 30;
+            this.label13.Text = "数据帧:";
             // 
-            // data1_txb
+            // label12
             // 
-            this.data1_txb.Location = new System.Drawing.Point(57, 15);
-            this.data1_txb.Name = "data1_txb";
-            this.data1_txb.Size = new System.Drawing.Size(166, 21);
-            this.data1_txb.TabIndex = 21;
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(10, 384);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(131, 12);
+            this.label12.TabIndex = 29;
+            this.label12.Text = "例如:7f0431323334DE10";
             // 
-            // data4_txb
+            // label11
             // 
-            this.data4_txb.Location = new System.Drawing.Point(57, 118);
-            this.data4_txb.Name = "data4_txb";
-            this.data4_txb.Size = new System.Drawing.Size(166, 21);
-            this.data4_txb.TabIndex = 23;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 354);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(131, 12);
+            this.label11.TabIndex = 28;
+            this.label11.Text = "格式:7F+长度+数据+CRC";
             // 
-            // label8
+            // data2_txb
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 122);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 12);
-            this.label8.TabIndex = 22;
-            this.label8.Text = "数据4:";
+            this.data2_txb.Location = new System.Drawing.Point(57, 46);
+            this.data2_txb.Name = "data2_txb";
+            this.data2_txb.Size = new System.Drawing.Size(166, 21);
+            this.data2_txb.TabIndex = 27;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(10, 50);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(41, 12);
+            this.label10.TabIndex = 26;
+            this.label10.Text = "数据2:";
             // 
             // data3_txb
             // 
@@ -633,56 +651,51 @@
             this.label9.Text = "数据3:";
             this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
-            // data2_txb
+            // data4_txb
             // 
-            this.data2_txb.Location = new System.Drawing.Point(57, 46);
-            this.data2_txb.Name = "data2_txb";
-            this.data2_txb.Size = new System.Drawing.Size(166, 21);
-            this.data2_txb.TabIndex = 27;
+            this.data4_txb.Location = new System.Drawing.Point(57, 118);
+            this.data4_txb.Name = "data4_txb";
+            this.data4_txb.Size = new System.Drawing.Size(166, 21);
+            this.data4_txb.TabIndex = 23;
             // 
-            // label10
+            // label8
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(10, 50);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 12);
-            this.label10.TabIndex = 26;
-            this.label10.Text = "数据2:";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(10, 122);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 12);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "数据4:";
             // 
-            // label11
+            // data1_txb
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 354);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(131, 12);
-            this.label11.TabIndex = 28;
-            this.label11.Text = "格式:7F+长度+数据+CRC";
+            this.data1_txb.Location = new System.Drawing.Point(57, 15);
+            this.data1_txb.Name = "data1_txb";
+            this.data1_txb.Size = new System.Drawing.Size(166, 21);
+            this.data1_txb.TabIndex = 21;
             // 
-            // label12
+            // label7
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(10, 384);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(131, 12);
-            this.label12.TabIndex = 29;
-            this.label12.Text = "例如:7f0431323334DE10";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 19);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 12);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "数据1:";
             // 
-            // label13
+            // startData_chb
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(10, 195);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(47, 12);
-            this.label13.TabIndex = 30;
-            this.label13.Text = "数据帧:";
+            this.startData_chb.AutoSize = true;
+            this.startData_chb.Location = new System.Drawing.Point(12, 159);
+            this.startData_chb.Name = "startData_chb";
+            this.startData_chb.Size = new System.Drawing.Size(108, 16);
+            this.startData_chb.TabIndex = 15;
+            this.startData_chb.Text = "启动数据帧接收";
+            this.startData_chb.UseVisualStyleBackColor = true;
             // 
-            // data_txb
+            // timer2
             // 
-            this.data_txb.Location = new System.Drawing.Point(12, 212);
-            this.data_txb.Name = "data_txb";
-            this.data_txb.Size = new System.Drawing.Size(211, 128);
-            this.data_txb.TabIndex = 31;
-            this.data_txb.Text = "";
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // Form1
             // 
@@ -783,6 +796,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.RichTextBox data_txb;
+        private System.Windows.Forms.Timer timer2;
     }
 }
 
